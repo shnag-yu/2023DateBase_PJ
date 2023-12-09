@@ -12,16 +12,16 @@
     <!-- 搜索结果显示 -->
     <div v-if="searchResults.length > 0">
       <div id="result_brief" style="margin: 20px 40%;">
-        <span style="margin: 35%;">共 {{ totalItems }} 条结果</span>
+        <!-- <span style="margin: 35%;">共 {{ totalItems }} 条结果</span> -->
         <el-pagination :total="totalItems" :page-size="pageSize" @current-change="handlePageChange"></el-pagination>
       </div>
 
       <div class="product-grid">
         <!-- 遍历搜索结果，显示商品简略信息 -->
-        <div v-for="product in paginatedResults" :key="product.id" class="product-item">
+        <div v-for="product in paginatedResults" :key="product.productId" class="product-item">
           <div>{{ product.name }}</div>
           <div>{{ product.description }}</div>
-          <el-button @click="goToProductDetails(product.id)">查看详情</el-button>
+          <el-button @click="goToProductDetails(product.productId)">查看详情</el-button>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@ export default {
     },
     // 跳转到商品详情页
     goToProductDetails(productId) {
-      // 示例：this.$router.push(`/product-details/${productId}`)
+      this.$router.push(`/product/${productId}`)
     },
   },
 };

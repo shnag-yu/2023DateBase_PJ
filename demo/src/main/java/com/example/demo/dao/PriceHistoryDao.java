@@ -35,9 +35,11 @@ public class PriceHistoryDao {
     }
 
 
-    public List<PriceHistory> getPriceHistorysByProductId(Long productId) {
-        String sql = "SELECT * FROM price_history WHERE product_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{productId}, new PriceHistoryRowMapper());
+    public List<PriceHistory> getPriceHistorysByProductId(Long productId, String timespan) {
+        int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
+//        System.out.println(days);
+        String sql = "SELECT * FROM price_history WHERE product_id = ? AND date > DATE_SUB(NOW(), INTERVAL ? DAY)";
+        return jdbcTemplate.query(sql, new Object[]{productId, days}, new PriceHistoryRowMapper());
     }
 
     public void deletePriceHistory(Long priceHistoryId) {

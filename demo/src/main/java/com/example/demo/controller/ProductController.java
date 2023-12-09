@@ -59,8 +59,9 @@ public class ProductController {
     }
 
     @GetMapping("/pricehistory/{productId}")
-    public List<PriceHistory> getPriceHistory(@PathVariable Long productId) {
-        return priceHistoryService.getAllPriceHistorysByProductId(productId);
+    public List<PriceHistory> getPriceHistory(@PathVariable Long productId, @RequestParam String timespan) {
+//        System.out.println(timespan);
+        return priceHistoryService.getAllPriceHistorysByProductId(productId,timespan);
     }
 
     @GetMapping("/search/keyword={keyword}")

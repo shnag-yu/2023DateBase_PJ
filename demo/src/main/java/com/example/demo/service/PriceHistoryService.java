@@ -29,8 +29,8 @@ public class PriceHistoryService {
         return priceHistoryDao.getAllPriceHistorys();
     }
 
-    public List<PriceHistory> getAllPriceHistorysByProductId(Long productId) {
-        return priceHistoryDao.getPriceHistorysByProductId(productId);
+    public List<PriceHistory> getAllPriceHistorysByProductId(Long productId, String timespan) {
+        return priceHistoryDao.getPriceHistorysByProductId(productId, timespan);
     }
 
     public void deletePriceHistory(Long priceHistoryId) {
