@@ -23,6 +23,7 @@ public class ProductRowMapper implements RowMapper<Product> {
         product.setPrice(resultSet.getDouble("price"));
         product.setMerchantId(resultSet.getLong("merchant_id"));
         product.setPlatformId(resultSet.getLong("platform_id"));
+        product.setDescription(resultSet.getString("prod_desc"));
         return product;
     }
 }

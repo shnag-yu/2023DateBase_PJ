@@ -18,6 +18,7 @@ public class Product {
     private Double price;
     private Long merchantId;
     private Long platformId;
+    private String description;
 
     // 构造函数、getter和setter等方法
 
@@ -33,12 +34,14 @@ public class Product {
                 Objects.equals(prodDate, product.prodDate) &&
                 Objects.equals(price, product.price) &&
                 Objects.equals(merchantId, product.merchantId) &&
-                Objects.equals(platformId, product.platformId);
+                Objects.equals(platformId, product.platformId) &&
+                Objects.equals(description, product.description);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, category, prodRegion, prodDate, price, merchantId, platformId);
+        return Objects.hash(productId, name, category, prodRegion, prodDate, price, merchantId, platformId, description);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class Product {
                 ", price=" + price +
                 ", merchantId=" + merchantId +
                 ", platformId=" + platformId +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

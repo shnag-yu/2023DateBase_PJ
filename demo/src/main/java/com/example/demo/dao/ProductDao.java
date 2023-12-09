@@ -56,4 +56,12 @@ public class ProductDao {
         String sql = "DELETE FROM product WHERE product_id = ?";
         jdbcTemplate.update(sql, productId);
     }
+
+    // 在 ProductDao 中实现
+    public List<Product> searchProductsByKeyword(String keyword) {
+        String sql = "SELECT * FROM product WHERE name LIKE ? OR prod_desc LIKE ?";
+        String searchTerm = "%" + keyword + "%";
+        return jdbcTemplate.query(sql, new Object[]{searchTerm, searchTerm}, new ProductRowMapper());
+    }
+
 }

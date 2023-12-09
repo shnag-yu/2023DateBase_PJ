@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;
@@ -62,4 +62,10 @@ public class ProductController {
     public List<PriceHistory> getPriceHistory(@PathVariable Long productId) {
         return priceHistoryService.getAllPriceHistorysByProductId(productId);
     }
+
+    @GetMapping("/search/keyword={keyword}")
+    public List<Product> searchProducts(@PathVariable String keyword) {
+        return productService.searchProductsByKeyword(keyword);
+    }
+
 }

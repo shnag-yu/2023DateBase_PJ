@@ -40,4 +40,9 @@ public class ProductService {
     public void deleteProduct(Long productId) {
         productDao.deleteProduct(productId);
     }
+
+    public List<Product> searchProductsByKeyword(String keyword) {
+        return productDao.searchProductsByKeyword(keyword);
+    }
+
 }
