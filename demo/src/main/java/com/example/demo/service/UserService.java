@@ -45,4 +45,8 @@ public class UserService {
     public void deleteUser(Long userId) {
         userDao.deleteUser(userId);
     }
+
+    public User getUserByName(String name) {
+        return userDao.getUserByName(name);
+    }
 }

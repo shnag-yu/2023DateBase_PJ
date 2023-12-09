@@ -44,4 +44,15 @@ public class UserDao {
         String sql = "DELETE FROM user WHERE id = ?";
         jdbcTemplate.update(sql, userId);
     }
+
+    public User getUserByName(String name) {
+        String sql = "SELECT * FROM user WHERE name = ?";
+        List<User> users = jdbcTemplate.query(sql, new Object[]{name}, new UserRowMapper());
+        if (!users.isEmpty()) {
+            return users.get(0);
+        } else {
+            // 处理没有匹配用户的情况，可能返回 null 或抛出自定义异常
+            return null;
+        }
+    }
 }

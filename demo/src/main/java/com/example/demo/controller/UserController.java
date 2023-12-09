@@ -4,6 +4,7 @@ import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.util.Result;
 
 import java.util.List;
 
@@ -20,14 +21,19 @@ public class UserController {
 
     // 处理获取所有用户的请求
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public Result<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return Result.success(users);
     }
 
     // 处理获取特定用户的请求
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
+    public Result<User> getUserById(@PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return Result.error(404,"用户不存在");
+        }
+        return Result.success(user);
     }
 
     // 处理保存新用户的请求
@@ -38,7 +44,7 @@ public class UserController {
 
     // 处理更新用户信息的请求
     @PutMapping("/{userId}")
-    public void updateUser(@PathVariable Long userId, @RequestBody User user) {
+    public Result updateUser(@PathVariable Long userId, @RequestBody User user) {
         User existingUser = userService.getUserById(userId);
         if (existingUser != null) {
             // 更新用户信息
@@ -49,8 +55,9 @@ public class UserController {
             existingUser.setTel(user.getTel());
 
             userService.updateUser(existingUser);
+            return Result.success(existingUser);
         }
-        // 如果用户不存在，可以选择返回适当的响应或抛出异常
+        return Result.error(400,"更新失败");
     }
 
     // 处理删除用户的请求
