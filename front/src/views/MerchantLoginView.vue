@@ -46,9 +46,9 @@
               .then((res) => {
                 if (res.data.code === 200) {
                   this.$message.success('登录成功');
-                  localStorage.setItem('user_id', res.data.data.id);
-                  console.log(localStorage.getItem("user_id"))
-                  this.$router.push('/usermain');
+                  localStorage.setItem('merchant_id', res.data.data.id);
+                  console.log(localStorage.getItem("merchant_id"))
+                  this.$router.push('/merchantmain');
                 } else {
                   this.$message.error(res.data.msg);
                 }

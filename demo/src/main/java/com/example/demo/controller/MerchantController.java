@@ -2,22 +2,29 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Merchant;
 import com.example.demo.service.MerchantService;
+import com.example.demo.entity.Product;
+import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/merchants")
 public class MerchantController {
 
     private final MerchantService merchantService;
+    private final ProductService ProductService;
 
     @Autowired
-    public MerchantController(MerchantService merchantService) {
+    public MerchantController(MerchantService merchantService, ProductService ProductService) {
         this.merchantService = merchantService;
+        this.ProductService = ProductService;
     }
 
     //查询自己的商家信息
-    @GetMapping("/{id}")
+    @GetMapping("/merchantinfo/{id}")
     public ResponseEntity<Merchant> getMerchant(@PathVariable Long id) {
         Merchant merchant = merchantService.getMerchantById(id);
         return ResponseEntity.ok(merchant);
@@ -44,4 +51,12 @@ public class MerchantController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //查找所有商品
+    @GetMapping("/merchant/{merchantId}")
+    public List<Product> getProductsByMerchantId(@PathVariable Long merchantId) {
+        return ProductService.getProductsByMerchantId(merchantId);
+    }
+
+
 }

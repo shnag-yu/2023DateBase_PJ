@@ -18,7 +18,7 @@ public class MerchantDao {
 
     // 查询自己的商家信息
     public Merchant findById(Long id) {
-        String sql = "SELECT * FROM merchant WHERE ID = ?";
+        String sql = "SELECT * FROM merchant WHERE merchant_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new MerchantRowMapper());
     }
 
