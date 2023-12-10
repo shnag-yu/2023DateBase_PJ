@@ -1,5 +1,7 @@
 import mysql.connector
 from faker import Faker
+from datetime import datetime, timedelta
+import random
 
 # 创建 Faker 实例
 fake = Faker()
@@ -11,6 +13,14 @@ db_config = {
     'password': '123456',
     'database': 'dbpj',
 }
+def generate_sql_timestamp():
+    # 生成一个随机的 datetime 对象
+    random_datetime = fake.date_time_this_decade()
+
+    # 将 datetime 对象格式化为 SQL TIMESTAMP 字符串
+    sql_timestamp = random_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+    return sql_timestamp
 
 # <--------user-------->
 def insert_users(n):
@@ -121,6 +131,7 @@ def insert_products(n):
     cursor = conn.cursor()
     merchant_ids = []
     platform_ids = []
+    prod_names = []
     #从数据库中读取merchant_id和platform_id
     cursor.execute("SELECT merchant_id FROM merchant")
     for row in cursor.fetchall():
@@ -128,14 +139,22 @@ def insert_products(n):
     cursor.execute("SELECT platform_id FROM platform")
     for row in cursor.fetchall():
         platform_ids.append(row[0])
-    # print(merchant_ids)
-    # print(platform_ids)
+    while(1):
+        prod_name = fake.word()
+        if prod_name not in prod_names:
+            prod_names.append(prod_name)
+        if len(prod_names) == 50:
+            break
+    getCat = {}
+    cats = ['电子产品', '服装', '食品', '日用品', '家具', '化妆品', '玩具', '书籍', '运动器材', '其他']
+    for name in prod_names:
+        getCat[name] = random.choice(cats)
 
     # 插入1000条数据
     while(n>0):
         # print(f'n={n}')
-        product_name = fake.word()+ str(fake.random_int())
-        category = fake.random_element(elements=('Electronics', 'Apparel', 'Books'))
+        product_name = fake.random_element(elements=prod_names)
+        category = getCat[product_name]
         prod_region = fake.city()
         prod_date = fake.date_between(start_date='-1y', end_date='today')
         price = round(fake.random.uniform(10, 500), 2)
@@ -203,9 +222,91 @@ def insert_price_history(n):
     cursor.close()
     conn.close()
 
+#<--------msg_list---------->
+def insert_msg_list(n):
+    conn = mysql.connector.connect(**db_config)
+
+    # 创建游标
+    cursor = conn.cursor()
+    user_ids = []
+    #从数据库中读取product_id
+    cursor.execute("SELECT ID FROM user")
+    for row in cursor.fetchall():
+        user_ids.append(row[0])
+
+    # 插入100,000条数据
+    while(n>0):
+        # print(f'n={n}')
+        product_id = fake.random_element(elements=user_ids)
+        time = generate_sql_timestamp()
+        content = "您收藏的商品降价了！"
+        # print(f"product_id={product_id}, time={time}, content={content}")
+
+        # 构建插入数据的 SQL 语句
+        sql = "INSERT INTO `msg_list` (`user_id`, `time`, `content`) VALUES (%s, %s, %s)"
+        values = (product_id, time, content)
+
+        n-=1
+        # 执行插入操作
+        try:
+            cursor.execute(sql, values)
+        except mysql.connector.errors.IntegrityError:
+            n+=1
+            # print("price_history insert error!")
+
+    # 提交事务
+    conn.commit()
+
+    # 关闭游标和连接
+    cursor.close()
+    conn.close()
+#<-------favorite------->
+def insert_favorite(n):
+    conn = mysql.connector.connect(**db_config)
+
+    # 创建游标
+    cursor = conn.cursor()
+    user_ids = []
+    product_ids = []
+    #从数据库中读取product_id
+    cursor.execute("SELECT ID FROM user")
+    for row in cursor.fetchall():
+        user_ids.append(row[0])
+    cursor.execute("SELECT product_id FROM product")
+    for row in cursor.fetchall():
+        product_ids.append(row[0])
+
+    # 插入100,000条数据
+    while(n>0):
+        # print(f'n={n}')
+        user_id = fake.random_element(elements=user_ids)
+        product_id = fake.random_element(elements=product_ids)
+        # print(f"user_id={user_id}, product_id={product_id}, time={time}")
+
+        # 构建插入数据的 SQL 语句
+        sql = "INSERT INTO `favorite` (`user_id`, `product_id`) VALUES (%s, %s)"
+        values = (user_id, product_id)
+
+        n-=1
+        # 执行插入操作
+        try:
+            cursor.execute(sql, values)
+        except mysql.connector.errors.IntegrityError:
+            n+=1
+            # print("price_history insert error!")
+
+    # 提交事务
+    conn.commit()
+
+    # 关闭游标和连接
+    cursor.close()
+    conn.close()
+
 if __name__ == '__main__':
     # insert_users(1000)
     # insert_platforms(10)
     # insert_merchants(100)
-    # insert_products(10000)
-    insert_price_history(1000000)
+    # insert_products(1000)
+    # insert_price_history(100000)
+    # insert_msg_list(10000)
+    insert_favorite(100000)

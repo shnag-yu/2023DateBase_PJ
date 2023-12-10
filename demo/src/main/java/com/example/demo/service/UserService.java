@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.UserDao;
+import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -48,5 +50,13 @@ public class UserService {
 
     public User getUserByName(String name) {
         return userDao.getUserByName(name);
+    }
+
+    public List<Map<String, Object>> getFavoriteProducts(String gender, Integer startAge, Integer endAge) {
+        return userDao.getFavoriteProducts(gender, startAge, endAge);
+    }
+
+    public List<Map<String, Object>> getFavoriteCategoryRatio(String gender, Integer startAge, Integer endAge) {
+        return userDao.getFavoriteCategoryRatio(gender, startAge, endAge);
     }
 }

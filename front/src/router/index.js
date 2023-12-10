@@ -60,7 +60,22 @@ const router = createRouter({
       path : "/merchantmain",
       name : 'merchantmain',
       component : () => import('../views/MerchantMainView.vue')
-    }
+    },
+    {
+      path: "/advanced_query_user",
+      name: 'advanced_query_user',
+      component: () => import('../views/AdvancedQuery/User.vue')
+    },
+    {
+      path: "/advanced_query_merchant",
+      name: 'advanced_query_merchant',
+      component: () => import('../views/AdvancedQuery/Merchant.vue')
+    },
+    {
+      path: "/advanced_query_product",
+      name: 'advanced_query_product',
+      component: () => import('../views/AdvancedQuery/Product.vue')
+    },    
   ]
 })
 

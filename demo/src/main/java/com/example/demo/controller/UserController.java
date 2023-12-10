@@ -1,12 +1,14 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.entity.Product;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.util.Result;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -64,5 +66,15 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
+    }
+
+    @GetMapping("/favoriteProducts")
+    public List<Map<String, Object>> getFavoriteProducts(@RequestParam String gender, @RequestParam Integer startAge, @RequestParam Integer endAge) {
+        return userService.getFavoriteProducts(gender, startAge, endAge);
+    }
+
+    @GetMapping("/favoriteCategoryRatio")
+    public List<Map<String, Object>> getFavoriteCategoryRatio(@RequestParam String gender, @RequestParam Integer startAge, @RequestParam Integer endAge) {
+        return userService.getFavoriteCategoryRatio(gender, startAge, endAge);
     }
 }
