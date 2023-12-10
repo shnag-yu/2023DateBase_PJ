@@ -135,13 +135,15 @@ export default {
       if(this.isFavorite){
         const productId = this.$route.params.productId;
         const userId = localStorage.getItem("user_id")
-        axios.delete(`/favorite/delete`,
-          {
-            user_id: userId,
-            product_id: productId,
+        axios.delete(`/favorite/delete`,{
+            params: {
+              user_id: userId,
+              product_id: productId,
+            }
           }
         ).then((res) => {
           this.isFavorite = false;
+          this.$message.success('取消收藏成功');
         });
       }
       else{
@@ -154,6 +156,7 @@ export default {
           }
         ).then((res) => {
           this.isFavorite = true;
+          this.$message.success('收藏成功');
         });
       }
     },

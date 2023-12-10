@@ -141,7 +141,7 @@ export default {
         ],
         price: [
           { required: true, message: '请输入商品价格', trigger: 'blur' },
-          { type: 'number', message: '价格必须为数字值', trigger: 'blur' },
+          { pattern: /^\d+$/, message: '价格只能是数字', trigger: 'blur' },
         ],
         description: [
           { required: true, message: '请输入商品描述', trigger: 'blur' },
@@ -167,6 +167,8 @@ export default {
             axios.post('/product', this.newProduct)
                 .then(() => {
                     this.showAddProductDialog = false;
+                    this.$message.success('添加成功');
+                    this.fetchProducts();
                     // 刷新商品列表或执行其他操作
                 })
                 .catch(error => {
