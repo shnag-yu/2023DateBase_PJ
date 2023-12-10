@@ -43,4 +43,10 @@ public class FavoriteDao {
         }
         return null; // 或者抛出一个自定义的异常
     }
+
+    // 通过用户 ID 查询 Favorite 记录
+    public List<Favorite> findAllFavoritesByUserId(Long userId) {
+        String sql = "SELECT * FROM favorite WHERE user_id = ?";
+        return jdbcTemplate.query(sql, new Object[] { userId }, new FavoriteRowMapper());
+    }
 }

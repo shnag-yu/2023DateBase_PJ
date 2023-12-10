@@ -4,7 +4,9 @@ import RegisterView from '../views/RegisterView.vue'
 import UserMainView from '../views/UserMainView.vue'
 import HomeView from '../views/HomeView.vue'
 import ProductView from '../views/ProductView.vue'
-
+import MyFavorite from '../views/MyFavorite.vue'
+import MerchantRegisterView from '../views/MerchantRegisterView.vue'
+import MerchantLoginView from '../views/MerchantLoginView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -38,6 +40,26 @@ const router = createRouter({
       path: '/product/:productId',
       name: 'product',
       component: ProductView
+    },
+    {
+      path : "/my-favorites",
+      name :  'my-favorites',
+      component : MyFavorite
+    },
+    {
+      path : "/merchantregister",
+      name :  'merchantregister',
+      component : MerchantRegisterView
+    },
+    {
+      path : "/merchantlogin",
+      name : 'merchantlogin',
+      component : MerchantLoginView
+    },
+    {
+      path : "/merchantmain",
+      name : 'merchantmain',
+      component : () => import('../views/MerchantMainView.vue')
     }
   ]
 })
