@@ -45,4 +45,8 @@ public class ProductService {
         return productDao.searchProductsByKeyword(keyword);
     }
 
+    public List<Product> getProductsByMerchantId(Long merchantId) {
+        return productDao.getProductsByMerchantId(merchantId);
+    }
+
 }

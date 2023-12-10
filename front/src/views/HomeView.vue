@@ -19,9 +19,11 @@
       <div class="product-grid">
         <!-- 遍历搜索结果，显示商品简略信息 -->
         <div v-for="product in paginatedResults" :key="product.productId" class="product-item">
-          <div>{{ product.name }}</div>
-          <div>{{ product.description }}</div>
-          <el-button @click="goToProductDetails(product.productId)">查看详情</el-button>
+          <div style="font-size: large; font-weight: bolder; margin: 10px 0;">{{ product.name }}</div>
+          <div>商家：{{ product.merchantName }}</div>
+          <div>平台：{{ product.platformName }}</div>
+          <div>价格：{{ product.price }}</div>
+          <el-button @click="goToProductDetails(product.productId)" style="margin-top: 10px;">查看详情</el-button>
         </div>
       </div>
     </div>

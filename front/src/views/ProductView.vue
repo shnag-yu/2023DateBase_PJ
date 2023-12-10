@@ -14,8 +14,8 @@
         <p>产地：{{ product.prodRegion }}</p>
         <p>生产日期：{{ product.prodDate }}</p>
         <p>价格：{{ product.price }}</p>
-        <p>商家ID：{{ product.merchantId }}</p>
-        <p>平台ID：{{ product.platformId }}</p>
+        <p>商家：{{ product.merchantName }}</p>
+        <p>平台：{{ product.platformName }}</p>
         <p>商品描述：{{ product.description }}</p>
 
         <!-- 收藏按钮 -->
@@ -23,13 +23,14 @@
       </div>
       <!-- 商品历史价格折线图 -->
       <div>
-        <el-select v-model="selectedTimespan" placeholder="选择时间跨度">
-          <el-option label="近一周" value="week"></el-option>
-          <el-option label="近一月" value="month"></el-option>
+        <el-select v-model="selectedTimespan" placeholder="选择时间跨度" style="align-items: center;">
           <el-option label="近一年" value="year"></el-option>
+          <el-option label="近一月" value="month"></el-option>
+          <el-option label="近一周" value="week"></el-option>
         </el-select>
         <!-- 使用 v-if 控制图表是否显示 -->
         <div v-if="selectedTimespan" id="PHC" style="height: 400px; width: 80%;"></div>
+        <div v-if="selectedTimespan" id="lowestPrice" style="text-align: center;">最低价：{{ lowestPrice }}</div>
       </div>
     </div>
   </div>
@@ -48,17 +49,16 @@ export default {
     return {
       product: {},
       isFavorite: false,
-      selectedTimespan: 'week',
+      selectedTimespan: 'year',
+      lowestPrice: 0,
     };
   },
   watch: {
-    // 监听 selectedTimespan 的变化，变化时调用 getHistoricalPrices
     selectedTimespan: 'getHistoricalPrices',
   },
   mounted() {
     // 获取商品详细信息
     this.getProductDetail();
-    // 初始化时获取商品历史价格
     this.getHistoricalPrices();
   },
   methods: {
@@ -93,6 +93,14 @@ export default {
             },
           ],
         });
+      });
+      axios.get(`/product/lowestprice/${productId}`, {
+        params: {
+          timespan: this.selectedTimespan,
+        }
+      }
+      ).then((res) => {
+        this.lowestPrice = res.data;
       });
     },
     toggleFavorite() {

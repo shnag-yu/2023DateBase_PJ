@@ -19,6 +19,8 @@ public class Product {
     private Long merchantId;
     private Long platformId;
     private String description;
+    private String merchantName;
+    private String platformName;
 
     // 构造函数、getter和setter等方法
 

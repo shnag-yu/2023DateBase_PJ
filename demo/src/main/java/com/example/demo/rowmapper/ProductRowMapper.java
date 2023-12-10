@@ -2,7 +2,9 @@ package com.example.demo.rowmapper;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +14,7 @@ import java.sql.SQLException;
  * @date 2023-12-09
  **/
 public class ProductRowMapper implements RowMapper<Product> {
+
     @Override
     public Product mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Product product = new Product();
@@ -24,6 +27,8 @@ public class ProductRowMapper implements RowMapper<Product> {
         product.setMerchantId(resultSet.getLong("merchant_id"));
         product.setPlatformId(resultSet.getLong("platform_id"));
         product.setDescription(resultSet.getString("prod_desc"));
+        product.setPlatformName(resultSet.getString("platform_name"));
+        product.setMerchantName(resultSet.getString("merchant_name"));
         return product;
     }
 }
