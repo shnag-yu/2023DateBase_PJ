@@ -4,6 +4,7 @@ import com.example.demo.entity.PriceHistory;
 import com.example.demo.entity.Product;
 import com.example.demo.service.PriceHistoryService;
 import com.example.demo.service.ProductService;
+import com.example.demo.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,13 +44,13 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public void updateProduct(@PathVariable Long productId, @RequestBody Product product) {
-        // Ensure the product ID in the path matches the ID in the request body
+    public Result updateProduct(@PathVariable Long productId, @RequestBody Product product) {
+        System.out.println(product);
         if (productId.equals(product.getProductId())) {
             productService.updateProduct(product);
+            return Result.success();
         } else {
-            // Handle mismatched IDs
-            // You may choose to throw an exception or handle it in a way that makes sense for your application
+            return Result.error(400, "商品不存在");
         }
     }
 
@@ -64,9 +65,18 @@ public class ProductController {
         return priceHistoryService.getAllPriceHistorysByProductId(productId,timespan);
     }
 
+    @GetMapping("lowestprice/{productId}")
+    public Integer getLowestPrice(@PathVariable Long productId, @RequestParam String timespan) {
+        return priceHistoryService.getLowestPrice(productId,timespan);
+    }
     @GetMapping("/search/keyword={keyword}")
     public List<Product> searchProducts(@PathVariable String keyword) {
         return productService.searchProductsByKeyword(keyword);
+    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public List<Product> getProductsByMerchantId(@PathVariable Long merchantId) {
+        return productService.getProductsByMerchantId(merchantId);
     }
 
 }
