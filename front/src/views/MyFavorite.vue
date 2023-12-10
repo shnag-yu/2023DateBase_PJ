@@ -45,7 +45,7 @@
          },
         async created() {
         try {
-            const userId = 1; // 假设的用户 ID，您可能需要动态获取或从路由参数中获取
+            const userId = localStorage.getItem("user_id"); // 假设的用户 ID，您可能需要动态获取或从路由参数中获取
             const response = await axios.get(`http://localhost:8080/favorite/user/${userId}`);
             const favoritesData = response.data;
     

@@ -44,12 +44,12 @@ public class FavoriteController {
 
     // 通过用户 ID 和商品 ID 查询 Favorite
     @GetMapping("/get")
-    public Result<Favorite> getFavorite(@RequestBody Favorite favorite) {
-        Long userId = favorite.getUser_id();
-        Long productId = favorite.getProduct_id();
-        Favorite favorite1 = favoriteService.getFavoriteByUserIdAndProductId(userId, productId);
+    public Result<Favorite> getFavorite(@RequestParam Long user_id, @RequestParam Long product_id) {
+//        Long userId = favorite.getUser_id();
+//        Long productId = favorite.getProduct_id();
+        Favorite favorite1 = favoriteService.getFavoriteByUserIdAndProductId(user_id, product_id);
         if (favorite1 != null) {
-            return Result.success(favorite); // 成功时返回favorite数据
+            return Result.success(favorite1); // 成功时返回favorite数据
         }
         return Result.error(404, "Favorite not found"); // 失败时返回错误信息
     }

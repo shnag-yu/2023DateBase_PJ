@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PriceHistory;
 import com.example.demo.entity.Product;
+import com.example.demo.service.PlatformService;
 import com.example.demo.service.PriceHistoryService;
 import com.example.demo.service.ProductService;
 import com.example.demo.util.Result;
@@ -16,15 +17,18 @@ public class ProductController {
 
     private final ProductService productService;
     private final PriceHistoryService priceHistoryService;
+    private final PlatformService platformService;
 
     @Autowired
-    public ProductController(ProductService productService, PriceHistoryService priceHistoryService) {
+    public ProductController(ProductService productService, PriceHistoryService priceHistoryService, PlatformService platformService) {
         this.productService = productService;
         this.priceHistoryService = priceHistoryService;
+        this.platformService = platformService;
     }
 
     @PostMapping
     public void saveProduct(@RequestBody Product product) {
+        product.setPlatformId(platformService.getPlatformByName(product.getPlatformName()).getId());
         productService.saveProduct(product);
     }
 
