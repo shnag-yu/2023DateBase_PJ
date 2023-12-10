@@ -10,6 +10,8 @@ import com.example.demo.entity.Product;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Repository
@@ -50,12 +52,39 @@ public class ProductDao {
     }
 
     public void updateProduct(Product product) {
-        String sql = "UPDATE product SET name = ?, category = ?, prod_region = ?, " +
-                "prod_date = ?, price = ?, merchant_id = ?, platform_id = ? , prod_desc= ?, last_modify_date=NOW()" +
-                "WHERE product_id = ?";
-        jdbcTemplate.update(sql, product.getName(), product.getCategory(), product.getProdRegion(),
-                product.getProdDate(), product.getPrice(), product.getMerchantId(),
-                product.getPlatformId(), product.getDescription(),product.getProductId());
+//        String sql = "UPDATE product SET name = ?, category = ?, prod_region = ?, " +
+//                "prod_date = ?, price = ?, merchant_id = ?, platform_id = ? , prod_desc= ?, last_modify_date=NOW()" +
+//                "WHERE product_id = ?";
+//        jdbcTemplate.update(sql, product.getName(), product.getCategory(), product.getProdRegion(),
+//                product.getProdDate(), product.getPrice(), product.getMerchantId(),
+//                product.getPlatformId(), product.getDescription(),product.getProductId());
+
+        // 首先，获取产品当前的价格和名称
+        Product existingProduct = getProductById(product.getProductId());
+
+        // 然后，根据条件更新产品信息
+        // 如果价格有变化，执行一系列操作
+        if (!existingProduct.getPrice().equals(product.getPrice())) {
+            // 更新产品信息
+            String updateSql = "UPDATE product SET name = ?, category = ?, prod_region = ?, " +
+                    "prod_date = ?, price = ?, merchant_id = ?, platform_id = ?, prod_desc= ?, last_modify_date=NOW() " +
+                    "WHERE product_id = ?";
+            jdbcTemplate.update(updateSql, product.getName(), product.getCategory(), product.getProdRegion(),
+                    product.getProdDate(), product.getPrice(), product.getMerchantId(),
+                    product.getPlatformId(), product.getDescription(), product.getProductId());
+
+            // 查询符合条件的收藏记录
+            String favoriteSql = "SELECT user_id FROM favorite WHERE product_id = ? AND price_LB >= ?";
+            List<Long> userIds = jdbcTemplate.queryForList(favoriteSql, new Object[]{product.getProductId(), product.getPrice()}, Long.class);
+
+            // 为每个符合条件的用户插入消息
+            String insertSql = "INSERT INTO msg_list (user_id, content, time) VALUES (?, ?, ?)";
+            for (Long userId : userIds) {
+                // 获取东八区当前时间
+                LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
+                jdbcTemplate.update(insertSql, userId, "你收藏的商品 " + existingProduct.getName() + " 降价了！", localDateTime);
+            }
+        }
     }
 
     @Transactional

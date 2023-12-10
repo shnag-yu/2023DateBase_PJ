@@ -22,6 +22,9 @@
       <div class="register-link">
         <router-link to="/merchantregister">商户注册</router-link>
       </div>
+      <div class="register-link">
+        <router-link to="/merchantregister">管理员登入</router-link>
+      </div>
     </el-card>
   </div>
 </template>

@@ -60,4 +60,15 @@ public class FavoriteController {
         return favoriteService.getFavoritesByUserId(userId);
     }
 
+    //删除收藏
+    @DeleteMapping("/delete")
+    public Result deleteFavorite(@RequestParam Long user_id, @RequestParam Long product_id) {
+        Favorite existingFavorite = favoriteService.getFavoriteByUserIdAndProductId(user_id, product_id);
+        if (existingFavorite == null) {
+            return Result.error(404, "商品未被收藏");
+        }
+        favoriteService.deleteFavorite(user_id, product_id);
+        return Result.success();
+    }
+
 }
