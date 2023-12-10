@@ -38,7 +38,7 @@ public class PriceHistoryService {
     }
 
 
-    public Integer getLowestPrice(Long productId, String timespan) {
+    public Double getLowestPrice(Long productId, String timespan) {
         return priceHistoryDao.getLowestPrice(productId, timespan);
     }
 }

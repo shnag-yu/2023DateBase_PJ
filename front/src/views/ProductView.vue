@@ -5,7 +5,7 @@
 
     <!-- 商品详细信息 -->
     <div class="product-detail">
-      <div style="margin-left: 10%;">
+      <div style="margin-left: 5%; width: 20%;">
         <h2>{{ product.name }}</h2>
         <!-- ... 其他商品详细信息 ... -->
         <!-- 商品详细信息 -->
@@ -22,14 +22,14 @@
         <el-button type="primary" @click="toggleFavorite">{{ isFavorite ? '取消收藏' : '收藏商品' }}</el-button>
       </div>
       <!-- 商品历史价格折线图 -->
-      <div>
+      <div style="width: 60%;">
         <el-select v-model="selectedTimespan" placeholder="选择时间跨度" style="align-items: center;">
           <el-option label="近一年" value="year"></el-option>
           <el-option label="近一月" value="month"></el-option>
           <el-option label="近一周" value="week"></el-option>
         </el-select>
         <!-- 使用 v-if 控制图表是否显示 -->
-        <div v-if="selectedTimespan" id="PHC" style="height: 400px; width: 80%;"></div>
+        <div v-if="selectedTimespan" id="PHC" style="height: 600px; width: 100%;"></div>
         <div v-if="selectedTimespan" id="lowestPrice" style="text-align: center;">最低价：{{ lowestPrice }}</div>
       </div>
     </div>
@@ -50,7 +50,7 @@ export default {
       product: {},
       isFavorite: false,
       selectedTimespan: 'year',
-      lowestPrice: 0,
+      lowestPrice: 0.0,
     };
   },
   watch: {
@@ -86,10 +86,25 @@ export default {
           yAxis: {
             type: 'value',
           },
+          tooltip: {
+            trigger: 'axis', // 触发类型，可以设置为 'item' 单项触发，也可以设置为 'axis' 坐标轴触发
+            axisPointer: {
+              type: 'cross' // 十字准星指示器
+            },
+            formatter: function (params) {
+              return 'Date: ' + params[0].axisValue + '<br/>Price: ' + params[0].data.toFixed(2);
+            }
+          },
           series: [
             {
               data: res.data.map((item) => item.price),
               type: 'line',
+              markPoint: {
+                data: [{
+                  type: 'min', // 标记最小值
+                  name: '最低点'
+                }]
+              }
             },
           ],
         });
@@ -115,11 +130,11 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 20px;
+  margin: 10px;
 }
 
 .product-detail div {
-  width: 48%;
+  width: 70%;
 }
 
 .product-detail h2 {

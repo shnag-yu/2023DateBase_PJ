@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dao.ProductDao;
 import com.example.demo.entity.Product;
+import com.example.demo.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +38,8 @@ public class ProductService {
         productDao.updateProduct(product);
     }
 
-    public void deleteProduct(Long productId) {
-        productDao.deleteProduct(productId);
+    public Result deleteProduct(Long productId) {
+        return productDao.deleteProduct(productId);
     }
 
     public List<Product> searchProductsByKeyword(String keyword) {

@@ -55,8 +55,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public void deleteProduct(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
+    public Result deleteProduct(@PathVariable Long productId) {
+        return productService.deleteProduct(productId);
     }
 
     @GetMapping("/pricehistory/{productId}")
@@ -66,7 +66,7 @@ public class ProductController {
     }
 
     @GetMapping("lowestprice/{productId}")
-    public Integer getLowestPrice(@PathVariable Long productId, @RequestParam String timespan) {
+    public Double getLowestPrice(@PathVariable Long productId, @RequestParam String timespan) {
         return priceHistoryService.getLowestPrice(productId,timespan);
     }
     @GetMapping("/search/keyword={keyword}")

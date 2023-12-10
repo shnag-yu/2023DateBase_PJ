@@ -47,9 +47,9 @@ public class PriceHistoryDao {
         jdbcTemplate.update(sql, priceHistoryId);
     }
 
-    public Integer getLowestPrice(Long productId, String timespan) {
+    public Double getLowestPrice(Long productId, String timespan) {
         int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
         String sql = "SELECT MIN(price) FROM price_history WHERE product_id = ? AND date > DATE_SUB(NOW(), INTERVAL ? DAY)";
-        return jdbcTemplate.queryForObject(sql, new Object[]{productId, days}, Integer.class);
+        return jdbcTemplate.queryForObject(sql, new Object[]{productId, days}, Double.class);
     }
 }

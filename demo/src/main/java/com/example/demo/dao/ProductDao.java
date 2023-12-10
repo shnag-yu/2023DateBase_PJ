@@ -2,10 +2,12 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.Product;
 import com.example.demo.rowmapper.ProductRowMapper;
+import com.example.demo.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entity.Product;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -56,9 +58,25 @@ public class ProductDao {
                 product.getPlatformId(), product.getDescription(),product.getProductId());
     }
 
-    public void deleteProduct(Long productId) {
-        String sql = "DELETE FROM product WHERE product_id = ?";
-        jdbcTemplate.update(sql, productId);
+    @Transactional
+    public Result deleteProduct(Long productId) {
+        try{
+            // 首先，从 price_history 表中删除记录
+            String deletePriceHistorySql = "DELETE FROM price_history WHERE product_id = ?";
+            jdbcTemplate.update(deletePriceHistorySql, productId);
+
+            // 然后，从 favorite 表中删除记录
+            String deleteFavoriteSql = "DELETE FROM favorite WHERE product_id = ?";
+            jdbcTemplate.update(deleteFavoriteSql, productId);
+
+            // 最后，删除产品本身
+            String deleteProductSql = "DELETE FROM product WHERE product_id = ?";
+            jdbcTemplate.update(deleteProductSql, productId);
+        }
+        catch (Exception e){
+            return Result.error(400, "删除失败");
+        }
+        return Result.success();
     }
 
     // 在 ProductDao 中实现
