@@ -13,6 +13,12 @@ public class Favorite {
     private Long product_id;
     private Double price_LB; // 用户为喜欢的商品设定的价格下限
 
+    public Favorite(Long user_id, Long product_id) {
+        this.user_id = user_id;
+        this.product_id = product_id;
+        this.price_LB = 0.0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

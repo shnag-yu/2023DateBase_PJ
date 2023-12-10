@@ -60,6 +60,7 @@ export default {
     // 获取商品详细信息
     this.getProductDetail();
     this.getHistoricalPrices();
+    this.getIfFfavorite();
   },
   methods: {
     getProductDetail() {
@@ -118,8 +119,43 @@ export default {
         this.lowestPrice = res.data;
       });
     },
+    getIfFfavorite() {
+      const productId = this.$route.params.productId;
+      const userId = localStorage.getItem("user_id")
+      axios.get(`/favorite/get`,{
+        params: {
+          user_id: userId,
+          product_id: productId,
+        }
+      }).then((res) => {
+        this.isFavorite = res.data.code === 200? true : false;
+      });
+    },
     toggleFavorite() {
-      this.isFavorite = !this.isFavorite;
+      if(this.isFavorite){
+        const productId = this.$route.params.productId;
+        const userId = localStorage.getItem("user_id")
+        axios.delete(`/favorite/delete`,
+          {
+            user_id: userId,
+            product_id: productId,
+          }
+        ).then((res) => {
+          this.isFavorite = false;
+        });
+      }
+      else{
+        const productId = this.$route.params.productId;
+        const userId = localStorage.getItem("user_id")
+        axios.post(`/favorite/add`,
+          {
+            user_id: userId,
+            product_id: productId,
+          }
+        ).then((res) => {
+          this.isFavorite = true;
+        });
+      }
     },
   },
 };
