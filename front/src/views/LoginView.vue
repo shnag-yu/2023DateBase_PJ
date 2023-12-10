@@ -16,6 +16,12 @@
       <div class="register-link">
         还没有账号？<router-link to="/register">去注册</router-link>
       </div>
+      <div class="register-link">
+        <router-link to="/merchantlogin">商户登入</router-link>
+      </div>
+      <div class="register-link">
+        <router-link to="/merchantregister">商户注册</router-link>
+      </div>
     </el-card>
   </div>
 </template>

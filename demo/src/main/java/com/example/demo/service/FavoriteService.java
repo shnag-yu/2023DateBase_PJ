@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class FavoriteService {
     private final FavoriteDao favoriteDao;
@@ -36,5 +38,10 @@ public class FavoriteService {
     // 通过用户 ID 和商品 ID 查询 Favorite
     public Favorite getFavoriteByUserIdAndProductId(Long userId, Long productId) {
         return favoriteDao.getFavoriteByUserIdAndProductId(userId, productId);
+    }
+
+    // 通过用户 ID 查询 Favorite
+    public List<Favorite> getFavoritesByUserId(Long userId) {
+        return favoriteDao.findAllFavoritesByUserId(userId);
     }
 }

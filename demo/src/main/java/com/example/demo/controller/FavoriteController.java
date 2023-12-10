@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/favorite")
 public class FavoriteController {
@@ -51,4 +53,11 @@ public class FavoriteController {
         }
         return Result.error(404, "Favorite not found"); // 失败时返回错误信息
     }
+
+    // 通过用户 ID 查询 Favorite
+    @GetMapping("/user/{userId}")
+    public List<Favorite> getFavoritesByUserId(@PathVariable Long userId) {
+        return favoriteService.getFavoritesByUserId(userId);
+    }
+
 }
