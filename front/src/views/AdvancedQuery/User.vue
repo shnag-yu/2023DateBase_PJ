@@ -15,9 +15,9 @@
       </el-form-item>
 
       <el-form-item label="年龄段">
-        <el-input v-model="formData.startAge" placeholder="开始年龄" style="width: 10%;"></el-input>
-        <span>岁到</span>
-        <el-input v-model="formData.endAge" placeholder="结束年龄" style="width: 10%;"> </el-input>
+        <el-input v-model="formData.startAge" placeholder="开始年龄" style="width: 5%;"></el-input>
+        <span>到</span>
+        <el-input v-model="formData.endAge" placeholder="结束年龄" style="width: 5%;"> </el-input>
       </el-form-item>
 
       <el-form-item>
