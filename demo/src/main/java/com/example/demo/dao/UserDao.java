@@ -1,11 +1,16 @@
 package com.example.demo.dao;
 
+import com.example.demo.entity.Product;
 import com.example.demo.rowmapper.UserRowMapper;
 import jakarta.transaction.Transactional;
+import com.example.demo.rowmapper.ProductRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entity.User;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDao {
@@ -65,5 +70,31 @@ public class UserDao {
             // 处理没有匹配用户的情况，可能返回 null 或抛出自定义异常
             return null;
         }
+    }
+
+    public List<Map<String, Object>> getFavoriteProducts(String gender, int startAge, int endAge) {
+        String sql =
+                "SELECT p.name AS product_name, COUNT(f.product_id) AS favorite_count " +
+                        "FROM favorite f " +
+                        "JOIN product p ON f.product_id = p.product_id " +
+                        "JOIN user u ON f.user_id = u.ID " +
+                        "WHERE u.gender = ? AND u.age BETWEEN ? AND ? " +
+                        "GROUP BY p.name " +
+                        "ORDER BY favorite_count DESC " +
+                        "LIMIT 10";
+         return jdbcTemplate.queryForList(sql, new Object[]{gender, startAge, endAge});
+    }
+
+    public List<Map<String, Object>> getFavoriteCategoryRatio(String gender, int startAge, int endAge) {
+        String sql =
+                "SELECT p.category as name, COUNT(*) / (SELECT COUNT(*) FROM favorite f INNER JOIN user u ON f.user_id = u.ID WHERE u.gender = ? AND u.age BETWEEN ? AND ?) AS value " +
+                        "FROM favorite f " +
+                        "JOIN product p ON f.product_id = p.product_id " +
+                        "JOIN user u ON f.user_id = u.ID " +
+                        "WHERE u.gender = ? AND u.age BETWEEN ? AND ? " +
+                        "GROUP BY p.category "+
+                        "ORDER BY value DESC " ;
+
+        return jdbcTemplate.queryForList(sql, gender, startAge, endAge, gender, startAge, endAge);
     }
 }
