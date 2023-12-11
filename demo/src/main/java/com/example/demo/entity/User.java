@@ -15,14 +15,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    private Long id;
-    private String name;
-    private String password;
-    private Short age;
-    private String gender;
-    private Long tel;
+        private Long id;
+        private String name;
+        private String password;
+        private Short age;
+        private String gender;
+        private Long tel;
 
     // 构造函数、getter和setter等方法
+    public User(Long id, String name, String password) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+    }
+
 
     @Override
     public boolean equals(Object o) {

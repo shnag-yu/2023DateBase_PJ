@@ -72,4 +72,15 @@ public class AuthController {
         merchantService.addMerchant(merchant);
         return Result.success();
     }
+    //管理员登录
+    @PostMapping("/admin/login")
+    public User adminlogin(@RequestParam String username, @RequestParam String password) {
+        System.out.println(username);
+        System.out.println(password);
+        if ("admin".equals(username) && "admin".equals(password)) {
+            return new User(1L, "admin", "admin");
+        } else {
+            return null;
+        }
+    }
 }

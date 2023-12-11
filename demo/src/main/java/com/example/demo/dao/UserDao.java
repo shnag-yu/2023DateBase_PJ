@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.Product;
 import com.example.demo.rowmapper.UserRowMapper;
+import jakarta.transaction.Transactional;
 import com.example.demo.rowmapper.ProductRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -45,9 +46,19 @@ public class UserDao {
     }
 
     // 根据ID从数据库中删除用户
+    @Transactional
     public void deleteUser(Long userId) {
-        String sql = "DELETE FROM user WHERE id = ?";
-        jdbcTemplate.update(sql, userId);
+        // 删除 favorite 表中与该用户相关的数据
+        String deleteFavoritesSql = "DELETE FROM favorite WHERE user_id = ?";
+        jdbcTemplate.update(deleteFavoritesSql, userId);
+
+        // 删除 msg_list 表中与该用户相关的数据
+        String deleteMessagesSql = "DELETE FROM msg_list WHERE user_id = ?";
+        jdbcTemplate.update(deleteMessagesSql, userId);
+
+        // 删除 user 表中的用户数据
+        String deleteUserSql = "DELETE FROM user WHERE id = ?";
+        jdbcTemplate.update(deleteUserSql, userId);
     }
 
     public User getUserByName(String name) {

@@ -18,7 +18,8 @@ public class MsgListDao {
 
     // 通过用户 ID 查询 MsgList
     public List<MsgList> getMsgListByUserId(Long userId) {
-        String sql = "SELECT * FROM msg_list WHERE user_id = ?";
+//        String sql = "SELECT * FROM msg_list WHERE user_id = ?";
+        String sql = "SELECT * FROM msg_list WHERE user_id = ? ORDER BY time DESC";
         return jdbcTemplate.query(sql, new Object[]{userId}, new MsgListRowMapper());
     }
 
