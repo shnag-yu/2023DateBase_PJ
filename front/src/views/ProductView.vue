@@ -5,8 +5,8 @@
 
     <!-- 商品详细信息 -->
     <div class="product-detail">
-      <div style="margin-left: 5%; width: 20%;">
-        <h2>{{ product.name }}</h2>
+      <div style="margin-left: 5%; width: 40%;">
+        <h1>{{ product.name }}</h1>
         <!-- ... 其他商品详细信息 ... -->
         <!-- 商品详细信息 -->
         <!-- <p>商品ID：{{ product.product_id }}</p> -->
@@ -20,16 +20,24 @@
 
         <!-- 收藏按钮 -->
         <el-button type="primary" @click="toggleFavorite">{{ isFavorite ? '取消收藏' : '收藏商品' }}</el-button>
+        <div style="width: 90%;">
+          <h3>此商品在其他商家的价格</h3>
+          <el-table :data="result.otherMerchants" style="width: 100%" stripe>
+            <el-table-column prop="merchant_name" label="商家名称"></el-table-column>
+            <el-table-column prop="price" label="价格"></el-table-column>
+            <el-table-column prop="price_diff" label="价格差"></el-table-column>
+          </el-table>
+        </div>
       </div>
       <!-- 商品历史价格折线图 -->
-      <div style="width: 60%;">
+      <div>
         <el-select v-model="selectedTimespan" placeholder="选择时间跨度" style="align-items: center;">
           <el-option label="近一年" value="year"></el-option>
           <el-option label="近一月" value="month"></el-option>
           <el-option label="近一周" value="week"></el-option>
         </el-select>
         <!-- 使用 v-if 控制图表是否显示 -->
-        <div v-if="selectedTimespan" id="PHC" style="height: 600px; width: 100%;"></div>
+        <div v-if="selectedTimespan" id="PHC" style="height: 600px; width: 1000px;"></div>
         <div v-if="selectedTimespan" id="lowestPrice" style="text-align: center;">最低价：{{ lowestPrice }}</div>
       </div>
     </div>
@@ -51,6 +59,9 @@ export default {
       isFavorite: false,
       selectedTimespan: 'year',
       lowestPrice: 0.0,
+      result: {
+        otherMerchants: [],
+      }
     };
   },
   watch: {
@@ -61,12 +72,25 @@ export default {
     this.getProductDetail();
     this.getHistoricalPrices();
     this.getIfFfavorite();
+    // this.getOtherMerchantPrices();
   },
   methods: {
     getProductDetail() {
       const productId = this.$route.params.productId;
       axios.get(`/product/${productId}`).then((res) => {
         this.product = res.data;
+        axios.get(`/product/otherMerchants`, {
+          params: {
+            product_name: this.product.name,
+          }
+        }
+        ).then((res) => {
+          console.log(res.data)
+          this.result.otherMerchants = res.data;
+          this.result.otherMerchants.forEach(item => {
+            item.price_diff = (item.price- this.product.price).toFixed(2);
+          });
+        });
       });
     },
     getHistoricalPrices() {
@@ -122,31 +146,31 @@ export default {
     getIfFfavorite() {
       const productId = this.$route.params.productId;
       const userId = localStorage.getItem("user_id")
-      axios.get(`/favorite/get`,{
+      axios.get(`/favorite/get`, {
         params: {
           user_id: userId,
           product_id: productId,
         }
       }).then((res) => {
-        this.isFavorite = res.data.code === 200? true : false;
+        this.isFavorite = res.data.code === 200 ? true : false;
       });
     },
     toggleFavorite() {
-      if(this.isFavorite){
+      if (this.isFavorite) {
         const productId = this.$route.params.productId;
         const userId = localStorage.getItem("user_id")
-        axios.delete(`/favorite/delete`,{
-            params: {
-              user_id: userId,
-              product_id: productId,
-            }
+        axios.delete(`/favorite/delete`, {
+          params: {
+            user_id: userId,
+            product_id: productId,
           }
+        }
         ).then((res) => {
           this.isFavorite = false;
           this.$message.success('取消收藏成功');
         });
       }
-      else{
+      else {
         const productId = this.$route.params.productId;
         const userId = localStorage.getItem("user_id")
         axios.post(`/favorite/add`,

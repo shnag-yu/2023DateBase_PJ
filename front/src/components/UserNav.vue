@@ -11,7 +11,7 @@
       <!-- 个人主页 -->
       <el-menu-item index="2" @click="goTo('/usermain')" v-if="userid != 1">个人主页</el-menu-item>
 
-      <!--消息列表-->>
+      <!--消息列表-->
       <el-menu-item index="3" @click="goTo('/msglist')" v-if="userid != 1">消息列表</el-menu-item>
 
       <el-menu-item index="4" @click="goTo('/adminmain')" v-if="userid == 1">管理员主页</el-menu-item>

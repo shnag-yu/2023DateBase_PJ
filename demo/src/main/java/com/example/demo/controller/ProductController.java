@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -83,4 +84,18 @@ public class ProductController {
         return productService.getProductsByMerchantId(merchantId);
     }
 
+    @GetMapping("/maxPriceRanges")
+    public List<Map<String, Object>> getMaxPriceRanges(@RequestParam String category,@RequestParam String timespan) {
+        return priceHistoryService.getMaxPriceRanges(category, timespan);
+    }
+
+    @GetMapping("/minPriceRanges")
+    public List<Map<String, Object>> getMinPriceRanges(@RequestParam String category,@RequestParam String timespan) {
+        return priceHistoryService.getMinPriceRanges(category, timespan);
+    }
+
+    @GetMapping("/otherMerchants")
+    public List<Map<String, Object>> getOtherMerchants(@RequestParam String product_name){
+        return productService.getOtherMerchants(product_name);
+    }
 }

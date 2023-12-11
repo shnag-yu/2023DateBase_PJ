@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ProductDao {
@@ -33,7 +34,10 @@ public class ProductDao {
     }
 
     public List<Product> getAllProducts() {
-        String sql = "SELECT * FROM product";
+        String sql = "SELECT p.*, pl.name as platform_name, m.name as merchant_name " +
+                "FROM product p " +
+                "LEFT JOIN platform pl ON p.platform_id = pl.platform_id " +
+                "LEFT JOIN merchant m ON p.merchant_id = m.merchant_id " ;
         return jdbcTemplate.query(sql, new ProductRowMapper());
     }
 
@@ -119,7 +123,8 @@ public class ProductDao {
                 "FROM product p " +
                 "LEFT JOIN platform pl ON p.platform_id = pl.platform_id " +
                 "LEFT JOIN merchant m ON p.merchant_id = m.merchant_id " +
-                "WHERE p.name LIKE ? OR p.prod_desc LIKE ?";
+                "WHERE p.name LIKE ? OR p.prod_desc LIKE ? "+
+                "ORDER BY p.name";
         String searchTerm = "%" + keyword + "%";
         return jdbcTemplate.query(sql, new Object[]{searchTerm, searchTerm}, new ProductRowMapper());
     }
@@ -133,5 +138,15 @@ public class ProductDao {
                 "LEFT JOIN merchant m ON p.merchant_id = m.merchant_id " +
                 "WHERE p.merchant_id = ?";
         return jdbcTemplate.query(sql, new Object[]{merchantId}, new ProductRowMapper());
+    }
+
+    public List<Map<String, Object>> getOtherMerchants(String productName) {
+        String sql =
+                "SELECT m.name AS merchant_name, p.price AS price "+
+                "FROM product AS p "+
+                "JOIN merchant AS m ON p.merchant_id = m.merchant_id "+
+                "WHERE p.name = ? "+
+                "ORDER BY p.price ASC ";
+        return jdbcTemplate.queryForList(sql, productName);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductService {
@@ -50,4 +51,7 @@ public class ProductService {
         return productDao.getProductsByMerchantId(merchantId);
     }
 
+    public List<Map<String, Object>> getOtherMerchants(String productName) {
+        return productDao.getOtherMerchants(productName);
+    }
 }

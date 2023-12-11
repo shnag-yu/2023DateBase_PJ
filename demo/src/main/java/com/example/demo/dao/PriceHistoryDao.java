@@ -9,6 +9,8 @@ import com.example.demo.entity.Product;
 
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * @Description：
  * @Author ShangYu
@@ -51,5 +53,33 @@ public class PriceHistoryDao {
         int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
         String sql = "SELECT MIN(price) FROM price_history WHERE product_id = ? AND date > DATE_SUB(NOW(), INTERVAL ? DAY)";
         return jdbcTemplate.queryForObject(sql, new Object[]{productId, days}, Double.class);
+    }
+
+    public List<Map<String, Object>> getMaxPriceRanges(String category, String timespan) {
+        int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
+        if(category.equals("所有")) category = null;
+        String sql =
+                "SELECT p.name AS product_name, (MAX(ph.price) - MIN(ph.price)) AS price_range "+
+                "FROM product AS p "+
+                "JOIN price_history AS ph ON p.product_id = ph.product_id "+
+                "WHERE (? IS NULL OR p.category = ?) AND ph.date > DATE_SUB(NOW(), INTERVAL ? DAY) "+
+                "GROUP BY p.name "+
+                "ORDER BY price_range DESC "+
+                "LIMIT 10; ";
+        return jdbcTemplate.queryForList(sql, new Object[]{category, category, days});
+    }
+
+    public List<Map<String, Object>> getMinPriceRanges(String category, String timespan) {
+        int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
+        if(category.equals("所有")) category = null;
+        String sql =
+                "SELECT p.name AS product_name, (MAX(ph.price) - MIN(ph.price)) AS price_range "+
+                "FROM product AS p "+
+                "JOIN price_history AS ph ON p.product_id = ph.product_id "+
+                "WHERE (? IS NULL OR p.category = ?) AND ph.date > DATE_SUB(NOW(), INTERVAL ? DAY) "+
+                "GROUP BY p.name "+
+                "ORDER BY price_range ASC "+
+                "LIMIT 10; ";
+        return jdbcTemplate.queryForList(sql, new Object[]{category, category, days});
     }
 }
