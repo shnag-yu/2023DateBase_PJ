@@ -60,7 +60,38 @@ const router = createRouter({
       path : "/merchantmain",
       name : 'merchantmain',
       component : () => import('../views/MerchantMainView.vue')
-    }
+    },
+    {
+      path : "/msglist",
+      name : 'msglist',
+      component : () => import('../views/MsgListView.vue')
+    },
+    {
+      path : "/adminlogin",
+      name : 'adminlogin',
+      component : () => import('../views/AdminLoginView.vue')
+    },
+    {
+      path : "/adminmain",
+      name : 'adminmain',
+      component : () => import('../views/AdminMainView.vue')
+    },
+    {
+      path : "/adminuser",
+      name : "adminuser",
+      component : () => import('../views/AdminUserView.vue')
+    },
+    {
+      path : "/adminmerchant",
+      name : "adminmerchant",
+      component : () => import('../views/AdminMerchantView.vue')
+    },
+    {
+      path : "/adminproduct",
+      name : "adminproduct",
+      component : () => import('../views/AdminProductView.vue')
+    },
+
   ]
 })
 
