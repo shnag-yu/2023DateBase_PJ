@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description：
@@ -40,5 +41,13 @@ public class PriceHistoryService {
 
     public Double getLowestPrice(Long productId, String timespan) {
         return priceHistoryDao.getLowestPrice(productId, timespan);
+    }
+
+    public List<Map<String, Object>> getMaxPriceRanges(String category, String timespan) {
+        return priceHistoryDao.getMaxPriceRanges(category, timespan);
+    }
+
+    public List<Map<String, Object>> getMinPriceRanges(String category, String timespan) {
+        return priceHistoryDao.getMinPriceRanges(category, timespan);
     }
 }
