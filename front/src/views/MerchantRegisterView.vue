@@ -55,7 +55,7 @@
           ],
           addr: [
             { required: true, message: '请输入地址', trigger: 'blur' },
-            { max: 32, message: '地址不能超过32个字符', trigger: 'blur' }
+            { max: 256, message: '地址不能超过256个字符', trigger: 'blur' }
           ],
         },
       };

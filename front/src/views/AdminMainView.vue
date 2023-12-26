@@ -5,7 +5,7 @@
         <el-button type="primary" @click="goTo('adminuser')">用户管理</el-button>
         <el-button type="primary" @click="goTo('adminmerchant')">商户管理</el-button>
         <el-button type="primary" @click="goTo('platform-management')">平台管理</el-button>
-        <el-button type="primary" @click="goTo('adminprodcut')">商品管理</el-button>
+        <el-button type="primary" @click="goTo('adminproduct')">商品管理</el-button>
         </div>
   </div>
 </template>

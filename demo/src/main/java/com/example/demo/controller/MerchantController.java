@@ -23,6 +23,11 @@ public class MerchantController {
         this.ProductService = ProductService;
     }
 
+    //查询所有商家
+    @GetMapping("/allmerchant")
+    public List<Merchant> getAllMerchants() {
+        return merchantService.getAllMerchants();
+    }
     //查询自己的商家信息
     @GetMapping("/merchantinfo/{id}")
     public ResponseEntity<Merchant> getMerchant(@PathVariable Long id) {
@@ -59,4 +64,10 @@ public class MerchantController {
     }
 
 
+    //更新商家信息
+    @PutMapping("/{merchantId}")
+    public void updateMerchant(@PathVariable Long merchantId, @RequestBody Merchant merchant) {
+        merchant.setId(merchantId);
+        merchantService.updateMerchant(merchant);
+    }
 }

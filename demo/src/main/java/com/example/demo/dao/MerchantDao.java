@@ -11,6 +11,7 @@ import java.util.List;
 public class MerchantDao {
     private final JdbcTemplate jdbcTemplate;
 
+
     @Autowired
     public MerchantDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -30,7 +31,13 @@ public class MerchantDao {
 
     //删除商家
     public int deleteById(Long id) {
-        String sql = "DELETE FROM merchant WHERE ID = ?";
+//        //先寻找与merchantid一样的product
+//        String productsql = "SELECT id FROM product WHERE merchant_id = ?";
+//        List<Long> prouduct = jdbcTemplate.query(productsql, new Object[]{id}, (rs, rowNum) -> rs.getLong("id"));
+//        for (Long productId : prouduct) {
+//            deleteProduct
+//        }
+        String sql = "DELETE FROM merchant WHERE merchant_id = ?";
         return jdbcTemplate.update(sql, id);
     }
 
@@ -43,5 +50,22 @@ public class MerchantDao {
         } else {
             return merchants.get(0); // 返回匹配的第一个商家
         }
+    }
+
+    //查询所有商家
+    public List<Merchant> findAll() {
+        String sql = "SELECT * FROM merchant"; // 假设表名为 merchant
+        return jdbcTemplate.query(sql, new MerchantRowMapper());
+    }
+
+    //更新商家信息
+    public void updateMerchant(Merchant merchant) {
+        String sql = "UPDATE merchant SET name = ?, password = ?, addr = ? WHERE merchant_id = ?";
+        jdbcTemplate.update(sql, merchant.getName(), merchant.getPassword(), merchant.getAddr(), merchant.getId());
+    }
+
+    public List<Long> findProductIdsByMerchantId(Long merchantId) {
+        String sql = "SELECT product_id FROM product WHERE merchant_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{merchantId}, (rs, rowNum) -> rs.getLong("product_id"));
     }
 }
