@@ -22,6 +22,7 @@ public class UserDao {
     }
 
     // 将新用户保存到数据库
+    @Transactional
     public void saveUser(User user) {
         String sql = "INSERT INTO user (name, password, age, gender, tel) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getName(), user.getPassword(), user.getAge(), user.getGender(), user.getTel());
@@ -40,6 +41,7 @@ public class UserDao {
     }
 
     // 更新数据库中现有用户信息
+    @Transactional
     public void updateUser(User user) {
         String sql = "UPDATE user SET name = ?, password = ?, age = ?, gender = ?, tel = ? WHERE id = ?";
         jdbcTemplate.update(sql, user.getName(), user.getPassword(), user.getAge(), user.getGender(), user.getTel(), user.getId());

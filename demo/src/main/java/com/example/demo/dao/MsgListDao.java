@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.MsgList;
 import com.example.demo.rowmapper.MsgListRowMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,9 @@ public class MsgListDao {
         return jdbcTemplate.query(sql, new Object[]{userId}, new MsgListRowMapper());
     }
 
+
     // 添加新的消息
+    @Transactional
     public int addMsgList(MsgList msgList) {
         String sql = "INSERT INTO msg_list (user_id, content, time) VALUES (?, ?, ?)";
         return jdbcTemplate.update(sql, msgList.getUserId(), msgList.getContent(), msgList.getTime());

@@ -2,6 +2,7 @@ package com.example.demo.dao;
 import com.example.demo.entity.PriceHistory;
 
 import com.example.demo.rowmapper.PriceHistoryRowMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,6 +26,7 @@ public class PriceHistoryDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Transactional
     public void savePriceHistory(PriceHistory priceHistory) {
         String sql = "INSERT INTO price_history (product_id, price, date) " +
                 "VALUES (?, ?, ?)";
@@ -44,6 +46,7 @@ public class PriceHistoryDao {
         return jdbcTemplate.query(sql, new Object[]{productId, days}, new PriceHistoryRowMapper());
     }
 
+    @Transactional
     public void deletePriceHistory(Long priceHistoryId) {
         String sql = "DELETE FROM price_history WHERE price_history_id = ?";
         jdbcTemplate.update(sql, priceHistoryId);
@@ -81,5 +84,11 @@ public class PriceHistoryDao {
                 "ORDER BY price_range ASC "+
                 "LIMIT 10; ";
         return jdbcTemplate.queryForList(sql, new Object[]{category, category, days});
+    }
+
+    @Transactional
+    public void updatePriceHistory(PriceHistory priceHistory) {
+        String sql = "UPDATE price_history SET price = ? WHERE product_id = ? AND date = ?";
+        jdbcTemplate.update(sql, priceHistory.getPrice(), priceHistory.getProductId(), priceHistory.getDate());
     }
 }

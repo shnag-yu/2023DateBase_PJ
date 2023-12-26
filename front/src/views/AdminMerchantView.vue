@@ -263,5 +263,10 @@ export default {
     border-radius: 10px;
     /* 圆角边框 */
 }
+.merchant-management{
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+}
 </style>
   

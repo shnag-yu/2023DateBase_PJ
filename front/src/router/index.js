@@ -105,7 +105,17 @@ const router = createRouter({
       path: "/advanced_query_product",
       name: 'advanced_query_product',
       component: () => import('../views/AdvancedQuery/Product.vue')
-    },    
+    },
+    {
+      path: "/adminpricehistory/:productId",
+      name: 'adminpricehistory',
+      component: () => import('../views/AdminPriceHistoryView.vue')
+    },
+    { 
+      path: "/adminplatform",
+      name: 'adminplatform',
+      component: () => import('../views/AdminPlatformView.vue')
+    }
   ]
 })
 

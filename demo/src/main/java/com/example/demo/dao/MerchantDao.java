@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.example.demo.entity.Merchant;
 import com.example.demo.rowmapper.MerchantRowMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -24,12 +25,14 @@ public class MerchantDao {
     }
 
     // 新增商家
+    @Transactional
     public int save(Merchant merchant) {
         String sql = "INSERT INTO merchant (name, password, addr) VALUES (?, ?, ?)";
         return jdbcTemplate.update(sql, merchant.getName(), merchant.getPassword(), merchant.getAddr());
     }
 
     //删除商家
+    @Transactional
     public int deleteById(Long id) {
 //        //先寻找与merchantid一样的product
 //        String productsql = "SELECT id FROM product WHERE merchant_id = ?";
@@ -59,6 +62,7 @@ public class MerchantDao {
     }
 
     //更新商家信息
+    @Transactional
     public void updateMerchant(Merchant merchant) {
         String sql = "UPDATE merchant SET name = ?, password = ?, addr = ? WHERE merchant_id = ?";
         jdbcTemplate.update(sql, merchant.getName(), merchant.getPassword(), merchant.getAddr(), merchant.getId());

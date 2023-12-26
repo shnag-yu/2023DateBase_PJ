@@ -82,13 +82,34 @@
             <!-- Edit Form Container -->
             <div class="edit-dialog-container">
                 <el-form :model="currentProduct">
-                    <el-form-item label="Description">
-                        <el-input v-model="currentProduct.description"></el-input>
-                    </el-form-item>
-                    <el-form-item label="Price">
-                        <el-input v-model="currentProduct.price" type="number"></el-input>
-                    </el-form-item>
-                </el-form>
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="currentProduct.name"></el-input>
+                </el-form-item>
+                <el-form-item label="类别" prop="category">
+                    <el-input v-model="currentProduct.category"></el-input>
+                </el-form-item>
+                <el-form-item label="产地" prop="prodRegion">
+                    <el-input v-model="currentProduct.prodRegion"></el-input>
+                </el-form-item>
+                <el-form-item label="生产日期" prop="prodDate">
+                    <el-date-picker v-model="currentProduct.prodDate" type="date" placeholder="选择日期"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="价格" prop="price">
+                    <el-input v-model="currentProduct.price" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="商家ID">
+                    <el-input v-model="currentProduct.merchantId" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="描述" prop="description">
+                    <el-input type="textarea" v-model="currentProduct.description"></el-input>
+                </el-form-item>
+                <el-form-item label="商家名称">
+                    <el-input v-model="currentProduct.merchantName" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="平台名称" prop="platformName">
+                    <el-input v-model="currentProduct.platformName" disabled></el-input>
+                </el-form-item>
+            </el-form>
                 <div class="dialog-footer">
                     <el-button @click="cancelEdit">Return</el-button>
                     <el-button type="primary" @click="submitEdit">Submit</el-button>
@@ -162,6 +183,7 @@ export default {
         submitProduct() {
             if (this.newProduct.prodDate && this.newProduct.prodDate instanceof Date) {
                 // 将 Date 对象转换为 ISO 字符串格式，然后提取日期部分
+                this.newProduct.prodDate.setDate(this.newProduct.prodDate.getDate() + 1);
                 this.newProduct.prodDate = this.newProduct.prodDate.toISOString().split('T')[0];
             }
             axios.post('/product', this.newProduct)
@@ -209,6 +231,11 @@ export default {
             const productId = this.currentProduct.productId;
             const product = this.currentProduct;
             console.log(product);
+            if (product.prodDate && product.prodDate instanceof Date) {
+                // 将 Date 对象转换为 ISO 字符串格式，然后提取日期部分
+                product.prodDate.setDate(product.prodDate.getDate() + 1);
+                product.prodDate = product.prodDate.toISOString().split('T')[0];
+            }
             axios.put(`/product/${productId}`, product)
                 .then(() => {
                     this.fetchProducts();

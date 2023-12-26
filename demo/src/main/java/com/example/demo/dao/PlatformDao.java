@@ -2,6 +2,7 @@ package com.example.demo.dao;
 import com.example.demo.entity.Platform;
 import com.example.demo.rowmapper.PlatformRowMapper;
 import com.example.demo.rowmapper.UserRowMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.example.demo.entity.User;
@@ -37,5 +38,10 @@ public class PlatformDao {
             // 处理没有匹配用户的情况，可能返回 null 或抛出自定义异常
             return null;
         }
+    }
+    @Transactional
+    public void updatePlatform(Platform platform) {
+        String sql = "UPDATE platform SET name = ? WHERE platform_id = ?";
+        jdbcTemplate.update(sql, platform.getName(), platform.getId());
     }
 }

@@ -27,4 +27,8 @@ public class PlatformService {
     public Platform getPlatformByName(String name) {
         return platformDao.getPlatformByName(name);
     }
+
+    public void updatePlatform(Platform platform) {
+        platformDao.updatePlatform(platform);
+    }
 }

@@ -98,4 +98,9 @@ public class ProductController {
     public List<Map<String, Object>> getOtherMerchants(@RequestParam String product_name){
         return productService.getOtherMerchants(product_name);
     }
+
+    @PutMapping("/pricehistory")
+    public void updatePriceHistory(@RequestBody PriceHistory priceHistory) {
+        priceHistoryService.updatePriceHistory(priceHistory);
+    }
 }

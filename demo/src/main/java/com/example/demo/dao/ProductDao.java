@@ -25,6 +25,7 @@ public class ProductDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Transactional
     public void saveProduct(Product product) {
         String sql = "INSERT INTO product (name, category, prod_region, prod_date, price, merchant_id, platform_id, prod_desc, last_modify_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
@@ -55,6 +56,7 @@ public class ProductDao {
         return jdbcTemplate.query(sql, new Object[]{category}, new ProductRowMapper());
     }
 
+    @Transactional
     public void updateProduct(Product product) {
 //        String sql = "UPDATE product SET name = ?, category = ?, prod_region = ?, " +
 //                "prod_date = ?, price = ?, merchant_id = ?, platform_id = ? , prod_desc= ?, last_modify_date=NOW()" +
@@ -88,6 +90,14 @@ public class ProductDao {
                 LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Asia/Shanghai"));
                 jdbcTemplate.update(insertSql, userId, "你收藏的商品 " + existingProduct.getName() + " 降价了！", localDateTime);
             }
+        }
+        else{
+                    String sql = "UPDATE product SET name = ?, category = ?, prod_region = ?, " +
+                "prod_date = ?, price = ?, merchant_id = ?, platform_id = ? , prod_desc= ?, last_modify_date=NOW()" +
+                "WHERE product_id = ?";
+        jdbcTemplate.update(sql, product.getName(), product.getCategory(), product.getProdRegion(),
+                product.getProdDate(), product.getPrice(), product.getMerchantId(),
+                product.getPlatformId(), product.getDescription(),product.getProductId());
         }
     }
 

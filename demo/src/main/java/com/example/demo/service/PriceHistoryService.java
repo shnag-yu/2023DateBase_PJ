@@ -50,4 +50,8 @@ public class PriceHistoryService {
     public List<Map<String, Object>> getMinPriceRanges(String category, String timespan) {
         return priceHistoryDao.getMinPriceRanges(category, timespan);
     }
+
+    public void updatePriceHistory(PriceHistory priceHistory) {
+        priceHistoryDao.updatePriceHistory(priceHistory);
+    }
 }
