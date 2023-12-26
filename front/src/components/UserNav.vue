@@ -21,7 +21,7 @@
         <template #title>进阶查询</template>
         <el-menu-item index="3-1" @click="goTo('/advanced_query_user')">用户</el-menu-item>
         <el-menu-item index="3-2" @click="goTo('/advanced_query_product')">商品</el-menu-item>
-        <el-menu-item index="3-3" @click="goTo('/advanced_query_merchant')">商家</el-menu-item>
+        <!-- <el-menu-item index="3-3" @click="goTo('/advanced_query_merchant')">商家</el-menu-item> -->
         <!-- <el-sub-menu index="3-4">
           <template #title>item four</template>
           <el-menu-item index="3-4-1">item one</el-menu-item>
