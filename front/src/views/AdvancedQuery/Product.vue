@@ -94,7 +94,7 @@ export default {
       }
       ).then((res) => {
         this.result.minProducts = res.data;
-        // console.log(this.result);
+        console.log(this.result);
       });
     },
   },

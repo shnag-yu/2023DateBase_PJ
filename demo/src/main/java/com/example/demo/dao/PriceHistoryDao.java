@@ -62,7 +62,7 @@ public class PriceHistoryDao {
         int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
         if(category.equals("所有")) category = null;
         String sql =
-                "SELECT p.name AS product_name, (MAX(ph.price) - MIN(ph.price)) AS price_range "+
+                "SELECT p.name AS product_name, ROUND((MAX(ph.price) - MIN(ph.price)),2) AS price_range "+
                 "FROM product AS p "+
                 "JOIN price_history AS ph ON p.product_id = ph.product_id "+
                 "WHERE (? IS NULL OR p.category = ?) AND ph.date > DATE_SUB(NOW(), INTERVAL ? DAY) "+
@@ -76,7 +76,7 @@ public class PriceHistoryDao {
         int days = timespan.equals("week") ? 7 : timespan.equals("month") ? 30 : 365;
         if(category.equals("所有")) category = null;
         String sql =
-                "SELECT p.name AS product_name, (MAX(ph.price) - MIN(ph.price)) AS price_range "+
+                "SELECT p.name AS product_name, ROUND((MAX(ph.price) - MIN(ph.price)),2) AS price_range "+
                 "FROM product AS p "+
                 "JOIN price_history AS ph ON p.product_id = ph.product_id "+
                 "WHERE (? IS NULL OR p.category = ?) AND ph.date > DATE_SUB(NOW(), INTERVAL ? DAY) "+
