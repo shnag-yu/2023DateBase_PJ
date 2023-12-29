@@ -38,6 +38,7 @@ export default {
         },
         formatTime(row, column, cellValue) {
             const date = new Date(cellValue);
+            date.setHours(date.getHours() - 8); // 向后调整 8 小时
             return date.toLocaleString(); // 格式化日期和时间
         }
 

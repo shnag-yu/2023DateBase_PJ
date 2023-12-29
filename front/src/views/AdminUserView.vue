@@ -166,6 +166,7 @@ export default {
             axios.get('/user')
                 .then(response => {
                     this.users = response.data.data;
+                    this.users.shift();
                     this.updatePagedUsers();
                     console.log(this.users)
                 })
