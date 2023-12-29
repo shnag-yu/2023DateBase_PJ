@@ -42,7 +42,7 @@
       <div style="width: 60%;">
         <h3>该群体用户收藏商品类别的比例：</h3>
         <!-- 这里可以使用第三方图表库，如echarts，来展示饼状图 -->
-        <div id="pieChart" style="width: 100%; height: 600px;"></div>
+        <div id="pieChart" style="height: 600px;"></div>
       </div>
     </div>
   </div>

@@ -176,7 +176,7 @@ def insert_products(n):
             cursor.execute(sql, values)
         except mysql.connector.errors.IntegrityError as err:
             n+=1
-            # print(err.msg)
+            print(err.msg)
 
     # 提交事务
     conn.commit()
@@ -306,7 +306,7 @@ if __name__ == '__main__':
     # insert_users(1000)
     # insert_platforms(10)
     # insert_merchants(100)
-    # insert_products(1000)
-    # insert_price_history(100000)
+    # insert_products(5000)
+    insert_price_history(100000)
     # insert_msg_list(10000)
-    insert_favorite(100000)
+    # insert_favorite(100000)

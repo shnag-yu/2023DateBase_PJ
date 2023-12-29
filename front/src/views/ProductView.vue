@@ -38,7 +38,7 @@
         </el-select>
         <!-- 使用 v-if 控制图表是否显示 -->
         <div v-if="selectedTimespan" id="PHC" style="height: 600px; width: 1000px;"></div>
-        <div v-if="selectedTimespan" id="lowestPrice" style="text-align: center;">最低价：{{ lowestPrice }}</div>
+        <div v-if="selectedTimespan" id="lowestPrice" style="text-align: center; font-size: large;">价格差：{{ priceGap }}</div>
       </div>
     </div>
   </div>
@@ -59,6 +59,9 @@ export default {
       isFavorite: false,
       selectedTimespan: 'year',
       lowestPrice: 0.0,
+      minValue: Infinity,
+      maxValue: 0.0,
+      priceGap: 0.0,
       result: {
         otherMerchants: [],
       }
@@ -88,7 +91,7 @@ export default {
           console.log(res.data)
           this.result.otherMerchants = res.data;
           this.result.otherMerchants.forEach(item => {
-            item.price_diff = (item.price- this.product.price).toFixed(2);
+            item.price_diff = (item.price - this.product.price).toFixed(2);
           });
         });
       });
@@ -122,18 +125,37 @@ export default {
           },
           series: [
             {
-              data: res.data.map((item) => item.price),
+              // data: res.data.map((item) => item.price),
+              data: res.data.map((item) => {
+                const price = item.price;
+                if (this.minValue === null || price < this.minValue) {
+                  this.minValue = price;
+                }
+                if (this.maxValue === null || price > this.maxValue) {
+                  this.maxValue = price;
+                }
+                return price;
+              }),
               type: 'line',
               markPoint: {
-                data: [{
-                  type: 'min', // 标记最小值
-                  name: '最低点'
-                }]
+                data: [
+                  {
+                    type: 'min', // 标记最小值
+                    name: '最低点'
+                  },
+                  {
+                    type: 'max', // 标记最大值
+                    name: '最高点'
+                  }
+                ]
               }
             },
           ],
         });
+      }).then(() => {
+        this.priceGap = (this.maxValue - this.minValue).toFixed(2);
       });
+      
       axios.get(`/product/lowestprice/${productId}`, {
         params: {
           timespan: this.selectedTimespan,
@@ -141,6 +163,7 @@ export default {
       }
       ).then((res) => {
         this.lowestPrice = res.data;
+
       });
     },
     getIfFfavorite() {
